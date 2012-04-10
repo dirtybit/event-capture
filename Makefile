@@ -1,5 +1,4 @@
 APP := event-capture
-# ROOT := /home/dirt/opt/android-sdk-linybit/Development/workspace/eventcapture
 INSTALL_DIR := /data/native
 NDK_PLATFORM_VER := 9
 
