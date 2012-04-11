@@ -98,6 +98,20 @@ int record(char *rec_file)
 		return -1;
 	}
 
+	res = write(out_fd, &nfds, sizeof(nfds));
+	if (res != sizeof(nfds)) {
+		fprintf(stderr, "Could not write header\n");
+		return -1;
+	}
+
+	for (res = 0, i = 0; i < nfds; i++)
+		res = write(out_fds, &dev_ids[i], sizeof(dev_ids[i]));
+
+	if (res != (nfds * sizeof(dev_ids[0]))) {
+		fprintf(stderr, "Could not write header\n");
+		return -1;
+	}
+
 	while (1) {
 		poll_res = poll(ufds, nfds, -1);
 		if (poll_res < 0) {
