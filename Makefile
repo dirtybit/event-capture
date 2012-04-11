@@ -1,4 +1,4 @@
-APP := event-capture
+# APP := event-capture
 INSTALL_DIR := /data/native
 NDK_PLATFORM_VER := 9
 
@@ -18,19 +18,29 @@ LDFLAGS := -Wl,--entry=main,-dynamic-linker=/system/bin/linker,-rpath-link=$(AND
 LDFLAGS += -nostdlib -lc
 LDFLAGS += -disable-multilib
 
-all: $(APP)
+# all: $(APP)
 
-OBJS += record.o
+# OBJS += record.o
 
-$(APP): $(OBJS)
+# $(APP): $(OBJS)
+#	$(CPP) $(LDFLAGS) -o $@ $^
+
+all: record replay
+
+record: record.o
+	$(CPP) $(LDFLAGS) -o $@ $^
+
+replay: replay.o
 	$(CPP) $(LDFLAGS) -o $@ $^
 
 %.o: %.c
 	$(CC) -c $(INCLUDE) $(CFLAGS) $< -o $@ 
 
-install: $(APP)
-	$(ANDROID_SDK_ROOT)/platform-tools/adb push $(APP) $(INSTALL_DIR)/$(APP) 
-	$(ANDROID_SDK_ROOT)/platform-tools/adb shell chmod 777 $(INSTALL_DIR)/$(APP)
+install: all
+	$(ANDROID_SDK_ROOT)/platform-tools/adb push record $(INSTALL_DIR)/record
+	$(ANDROID_SDK_ROOT)/platform-tools/adb shell chmod 777 $(INSTALL_DIR)/record
+	$(ANDROID_SDK_ROOT)/platform-tools/adb push replay $(INSTALL_DIR)/replay
+	$(ANDROID_SDK_ROOT)/platform-tools/adb shell chmod 777 $(INSTALL_DIR)/replay
 
 shell:
 	$(ANDROID_SDK_ROOT)/platform-tools/adb shell
@@ -50,4 +60,4 @@ debug:
 	$(GDB_CLIENT) $(APP)
 
 clean:
-	@rm -f $(APP).o $(APP)
+	@rm -f *.o replay record a.out
