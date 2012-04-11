@@ -100,15 +100,15 @@ int record(char *rec_file)
 
 	res = write(out_fd, &nfds, sizeof(nfds));
 	if (res != sizeof(nfds)) {
-		fprintf(stderr, "Could not write header\n");
+		fprintf(stderr, "Could not write header (nfds)\n");
 		return -1;
 	}
 
 	for (res = 0, i = 0; i < nfds; i++)
-		res = write(out_fds, &dev_ids[i], sizeof(dev_ids[i]));
+		res += write(out_fd, &dev_ids[i], sizeof(dev_ids[i]));
 
 	if (res != (nfds * sizeof(dev_ids[0]))) {
-		fprintf(stderr, "Could not write header\n");
+		fprintf(stderr, "Could not write header (ufds)\n");
 		return -1;
 	}
 
@@ -170,8 +170,10 @@ int main(int argc, char **argv)
 	char *rec_file = "/data/native/rec";
 	char *dev1 = "event1";
 	char *dev2 = "event2";
+	char *dev3 = "event6";
 	char dev1_path[PATH_MAX];
 	char dev2_path[PATH_MAX];
+	char dev3_path[PATH_MAX];
 	char *path;
 
 	strcpy(dev1_path, DEV_PATH);
@@ -182,12 +184,18 @@ int main(int argc, char **argv)
 	path = dev2_path + strlen(DEV_PATH);
 	strcpy(path, dev2);
 
-	printf("dev1: %s\ndev2: %s\n", dev1_path, dev2_path);
+	strcpy(dev3_path, DEV_PATH);
+	path = dev3_path + strlen(DEV_PATH);
+	strcpy(path, dev3);
+
+	printf("dev1: %s\ndev2: %s\ndev3: %s\n", dev1_path, dev2_path, dev3_path);
 
 	if (open_dev(1) < 0)
 		printf("Could not open device: %s\n", dev1_path);
 	if (open_dev(2) < 0)
 		printf("Could not open device: %s\n", dev2_path);
+	if (open_dev(3) < 0)
+		printf("Could not open device: %s\n", dev3_path);
 
 	if (record(rec_file) < 0)
 		printf("Error on recording\n");
