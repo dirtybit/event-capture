@@ -14,8 +14,6 @@ static struct pollfd *ufds;
 static int nfds;
 static int *dev_ids;
 
-int out_fd;
-
 int filter(const struct dirent *ent)
 {
 	return ent->d_name[0] == '.';
