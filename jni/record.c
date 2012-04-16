@@ -167,7 +167,7 @@ int main(int argc, char **argv)
 		sorted_ents++;
 	}
 */
-	char *rec_file = "/data/native/rec";
+	char *rec_file = "/data/native/recfile";
 	char *dev1 = "event1";
 	char *dev2 = "event2";
 	char *dev3 = "event6";

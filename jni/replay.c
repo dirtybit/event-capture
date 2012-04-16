@@ -116,10 +116,23 @@ int replay()
 	return 0;
 }
 
+void usage()
+{
+	printf("Usage:\n");
+	printf("\treplay [record_file]\n");
+	exit(0);
+}
+
 int main(int argc, char **argv)
 {
 	int res;
-	char *rec_file = "/data/native/rec";
+	char *rec_file = "/data/native/recfile";
+
+	if (argc == 2)
+		if (!strcmp(argv[1], "-h") || !strcmp(argv[1], "--help"))
+			usage();
+		else
+			rec_file = argv[1];
 
 	rec_fd = open(rec_file, O_RDONLY);
 
@@ -135,4 +148,5 @@ int main(int argc, char **argv)
 	}
 
 	exit(0);
+	return 0;
 }

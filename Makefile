@@ -4,48 +4,24 @@ NDK_PLATFORM_VER := 9
 
 ANDROID_NDK_ROOT := ${HOME}/Development/tools/android-ndk
 ANDROID_SDK_ROOT := ${HOME}/Development/tools/android-sdk
-PREBUILD := $(ANDROID_NDK_ROOT)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86
-BIN := $(PREBUILD)/bin
 
-CPP := $(BIN)/arm-linux-androideabi-g++
-CC := $(BIN)/arm-linux-androideabi-gcc
-
-GDB_CLIENT := $(BIN)/arm-linux-androideabi-gdb
-DEBUG = -g
-CFLAGS := $(DEBUG) -fno-short-enums -I$(ANDROID_NDK_ROOT)/platforms/android-$(NDK_PLATFORM_VER)/arch-arm/usr/include
-LDFLAGS := -Wl,--entry=main,-dynamic-linker=/system/bin/linker,-rpath-link=$(ANDROID_NDK_ROOT)/platforms/android-$(NDK_PLATFORM_VER)/arch-arm/usr/lib -L$(ANDROID_NDK_ROOT)/platforms/android-$(NDK_PLATFORM_VER)/arch-arm/usr/lib
-LDFLAGS += -nostdlib -lc
-LDFLAGS += -disable-multilib
-
-# all: $(APP)
-
-# OBJS += record.o
-
-# $(APP): $(OBJS)
-#	$(CPP) $(LDFLAGS) -o $@ $^
-
-all: record replay
-
-record: record.o
-	$(CPP) $(LDFLAGS) -o $@ $^
-
-replay: replay.o
-	$(CPP) $(LDFLAGS) -o $@ $^
-
-%.o: %.c
-	$(CC) -c $(INCLUDE) $(CFLAGS) $< -o $@ 
+all:
+	$(ANDROID_NDK_ROOT)/ndk-build
 
 install: all
-	$(ANDROID_SDK_ROOT)/platform-tools/adb push record $(INSTALL_DIR)/record
+	$(ANDROID_SDK_ROOT)/platform-tools/adb push ./libs/armeabi/record $(INSTALL_DIR)/record
 	$(ANDROID_SDK_ROOT)/platform-tools/adb shell chmod 777 $(INSTALL_DIR)/record
-	$(ANDROID_SDK_ROOT)/platform-tools/adb push replay $(INSTALL_DIR)/replay
+	$(ANDROID_SDK_ROOT)/platform-tools/adb push ./libs/armeabi/replay $(INSTALL_DIR)/replay
 	$(ANDROID_SDK_ROOT)/platform-tools/adb shell chmod 777 $(INSTALL_DIR)/replay
 
 shell:
 	$(ANDROID_SDK_ROOT)/platform-tools/adb shell
 
-run:
-	$(ANDROID_SDK_ROOT)/platform-tools/adb shell $(INSTALL_DIR)/$(APP)
+record:
+	$(ANDROID_SDK_ROOT)/platform-tools/adb shell $(INSTALL_DIR)/record
+
+replay:
+	$(ANDROID_SDK_ROOT)/platform-tools/adb shell $(INSTALL_DIR)/replay
 
 debug-install:
 	$(ANDROID_SDK_ROOT)/platform-tools/adb push $(PREBUILD)/../gdbserver $(INSTALL_DIR)/gdbserver
@@ -59,4 +35,5 @@ debug:
 	$(GDB_CLIENT) $(APP)
 
 clean:
-	@rm -f *.o replay record a.out
+	$(ANDROID_NDK_ROOT)/ndk-build clean
+
