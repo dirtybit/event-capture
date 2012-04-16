@@ -2,11 +2,10 @@
 INSTALL_DIR := /data/native
 NDK_PLATFORM_VER := 9
 
-ANDROID_NDK_ROOT := /opt/android-ndk-r7b
-ANDROID_NDK_HOST := linux-x86
-ANDROID_SDK_ROOT := /opt/android-sdk-linux
-PREBUILD := $(ANDROID_NDK_ROOT)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/$(ANDROID_NDK_HOST)
-BIN := $(PREBUILD)/bin/
+ANDROID_NDK_ROOT := ${HOME}/Development/tools/android-ndk
+ANDROID_SDK_ROOT := ${HOME}/Development/tools/android-sdk
+PREBUILD := $(ANDROID_NDK_ROOT)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86
+BIN := $(PREBUILD)/bin
 
 CPP := $(BIN)/arm-linux-androideabi-g++
 CC := $(BIN)/arm-linux-androideabi-gcc
