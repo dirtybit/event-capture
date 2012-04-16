@@ -119,7 +119,9 @@ int replay()
 void usage()
 {
 	printf("Usage:\n");
-	printf("\treplay [record_file]\n");
+	printf("\treplay [record_file]\n\n");
+	printf("- record_file: Path to the event record file (default ./recfile)\n");
+
 	exit(0);
 }
 
